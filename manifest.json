@@ -6,8 +6,11 @@
     "content_scripts":[{
         "matches" : ["http://*/*",
                      "https://*/*"],
-        "js": ["jquery-1.8.2.min.js", "js/jquery-ui-1.8.24.custom.min.js"],
-        "css" : ["css/pepper-grinder/jquery-ui-1.8.24.custom.css"]
+        "run_at" : "document_end",
+        "js": ["js/jquery-1.8.2.min.js", 
+               "js/jquery-ui-1.8.24.custom.min.js", 
+               "foreground.js" ],
+        "css" : ["css/pepper-grinder/jquery-ui-1.8.24.custom.css", "foreground.css"]
 
     }],
     "background": {

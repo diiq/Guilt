@@ -1,6 +1,6 @@
-$("body").append("<div id=\"guilt_success_dialog\" title=\"Guilt: Success\"><p>Did you accomplish thing?</p></div>");
+$("body").append("<div id=\"guilt_success_dialog\" title=\"Guilt: Success\"><p>Did you get what you needed?</p></div>");
 
-$("body").append("<div id=\"guilt_borrow_dialog\" title=\"Guilt: Oh, You'd like to borrow the Internet?\"><p>What for></p><input type=\"text\"></input>For how long?</div>");
+$("body").append("<div id=\"guilt_borrow_dialog\" title=\"Guilt: Oh, You'd like to borrow the Internet?\"><p>For how long?</div>");
 
 
 $('#guilt_success_dialog').dialog({
@@ -33,6 +33,6 @@ $('#guilt_borrow_dialog').dialog({
 		}
 	}
 });
-
+alert("begin");
 // send "new page" message
 
