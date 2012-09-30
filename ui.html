@@ -51,7 +51,7 @@ var modal = (function(){
 }());
 
 $(document).ready(function () {
-    modal.open({content: $("#guilt_borrow")});
+    modal.open({content: $("#guilt_success")});
     $('#guilt_reason_input').focus();
 });
 </script>
@@ -65,7 +65,7 @@ $(document).ready(function () {
       <img src="for_what.png">
       <input type="text" id="guilt_reason_input"></input>
       <img src="how_long.png">
-      <div class="guilt_button" id="guilt_15_button">15 min</div>
+      <div class="guilt_button guilt_right_button" id="guilt_15_button">15 min</div>
       <div class="guilt_button" id="guilt_5_button">5 min</div>
     </div>
 
@@ -92,6 +92,19 @@ $(document).ready(function () {
       </ul>
       </div>
     </div>
+  </div>
+
+
+
+  <div id="guilt_success">
+
+    <div id="guilt_query">
+      <img src="the_job.png">
+      <div class="guilt_button guilt_right_button" id="guilt_failure_button">No.</div>
+      <div class="guilt_button" id="guilt_success_button">Yes!</div>
+
+    </div>
+
   </div>
 
 </body>
