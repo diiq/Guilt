@@ -1,88 +1,14 @@
-$("body").append("<div id=\"guilt_success_dialog\" title=\"Guilt: Success\"><p>Did you get what you needed?</p></div>");
-
-$("body").append("<div id=\"guilt_borrow_dialog\" title=\"Guilt\"><div id='guilt_reasons'></div><p><strong>Oh, you'd like to borrow the Internet?</strong></p><p>What will you be using it for?</p><input class='ui-corner-all' type='text' id='guilt_reason'></input><p>And when, pray tell, will you be bringing it back?<p></div>");
-
-var x_style = "block";  //TODO enclose
-var hide_x = function () {
-    x_style = $(".ui-dialog-titlebar-close").css("display");
-    $(".ui-dialog-titlebar-close").css("display", "none");
-}
-
-var show_x = function () {
-    $(".ui-dialog-titlebar-close").css("display", x_style);
-}
-
-var htmlize_reasons = function (reasons) {
-    return "<ul><li>" + reasons.join("</li><li>") + "</li></ul>";
-}
-
-$('#guilt_success_dialog').dialog({
-    modal: true,
-	autoOpen: false,
-	width: 600,
-    closeOnEscape: false,
-    position: ["center", 100],
-    open: hide_x, // These hide the close X without permenantly interfering with the 
-    close: show_x, // styling of the page underneath.
-	buttons: {
-		"Yes, Mission Accomplished.": function() {
-            // send "success" message and close tabs.
-		},
-		"No. Damn.": function() {
-			$(this).dialog("close");
-			$('#guilt_borrow_dialog').dialog("open");
-		}
-	},
-});
-
-$('#guilt_borrow_dialog').dialog({
-    modal: true,
-	autoOpen: false,
-	width: 600,
-	closeOnEscape: false,
-    position: ["center", 100],
-    open: hide_x,
-    close: show_x,
-    buttons: {
-		"5 minutes.": function() {
-            chrome.extension.sendMessage({time:5, reason:$("#guilt_reason").val()});
-		},
-		"15 minutes": function() {
-            chrome.extension.sendMessage({time:15, reason:$("#guilt_reason").val()});
-		}
-	}
-});
-
-
-// send "new page" message
-chrome.extension.onMessage.addListener(
-  function(request, sender, sendResponse) {
-      if (request.dialog) {
-          $('#guilt_'+request.dialog+'_dialog').dialog(request.action);
-      }
-      if (request.action === "open") {
-         $("#guilt_reasons").html(htmlize_reasons(request.reasons));
-      }
-  });
-
-
-chrome.extension.sendMessage({e:"new_page"});
-
-
-
 var modal = (function(){
     var 
     method = {},
-    overlay = $('<div id="guilt_overlay"></div>');
-    modal = $('<div id="guilt_modal"><div id="guilt_content"></div></div>');
-    content = $('');
+    overlay = $('<div id="guilt_overlay"></div>'),
+    modal = $('<div id="guilt_modal"></div>');
 
     modal.hide();
     overlay.hide();
-    modal.append(content);
 
     $('body').append(overlay, modal);
-
+        
     method.center = function () {
         var top, left;
 
@@ -96,9 +22,13 @@ var modal = (function(){
     };
 
     method.open = function (settings) {
-        method.center();
+        modal.append(settings.content);
+        settings.content.show();
 
+        method.center();
+        setTimeout(method.center, 100);
         $(window).bind('resize.modal', method.center);
+
 
         modal.show();
         overlay.show();
@@ -106,9 +36,75 @@ var modal = (function(){
 
     method.close = function () {
         modal.hide();
+        $("body").append(modal.contents())
         overlay.hide();
-        (window).unbind('resize.modal');
+        $(window).unbind('resize.modal');
     };
 
     return method;
 }());
+
+var get_time = function (time) {
+    return function () {
+        if ($("#guilt_reason_input").val() === "") {
+            $("#guilt_reason_input").css("border-color", "#f00");
+        } else {
+            chrome.extension.sendMessage({time:time, reason:$("#guilt_reason_input").val()});
+            $("#guilt_reason_input").css("border-color", "#cbe86b");
+        }
+    }
+}
+
+success_content = $('<div id="guilt_success"><div id="guilt_query"><img id="guilt_the_job"><div class="guilt_button guilt_right_button" id="guilt_failure_button">No.</div><div class="guilt_button" id="guilt_success_button">Yes!</div></div></div>').hide();
+$("body").append(success_content);
+
+
+borrow_content = $('<div id="guilt_borrow"><div id="guilt_query"><img id="guilt_for_what"><input type="text" id="guilt_reason_input"></input><img id="guilt_how_long"><div class="guilt_button guilt_right_button" id="guilt_15_button">15 min</div><div class="guilt_button" id="guilt_5_button">5 min</div></div><div id="guilt_reasons"><img id="guilt_recent"><div id="guilt_reasons_list"></div></div></div>').hide();
+$("body").append(borrow_content);
+
+$("#guilt_for_what").attr('src', chrome.extension.getURL("for_what.png"));
+$("#guilt_how_long").attr('src', chrome.extension.getURL("how_long.png"));
+$("#guilt_recent").attr('src', chrome.extension.getURL("recent.png"));
+$("#guilt_the_job").attr('src', chrome.extension.getURL("the_job.png"));
+
+$("#guilt_reason_input").keypress(function (e) {
+    if ( e.which == 13 ) $("#guilt_5_button").click();
+});
+
+$("#guilt_5_button").click(get_time(5));
+$("#guilt_15_button").click(get_time(15));
+$("#guilt_failure_button").click(function() {
+    modal.close();
+    modal.open({content:$("#guilt_borrow")});
+    $('#guilt_reason_input').focus();
+});
+
+$("#guilt_success_button").click(function() {
+    chrome.extension.sendMessage({success:true});    //close all tabs message.
+});
+
+
+var htmlize_reasons = function (reasons) {
+    return "<ul><li>" + reasons.join("</li><li>") + "</li></ul>";
+}
+
+// send "new page" message
+chrome.extension.onMessage.addListener(
+  function(request, sender, sendResponse) {
+      if (request.dialog && request.action === "open") {
+          modal.open({content:$('#guilt_'+request.dialog)});
+          $("#guilt_reasons_list").html(htmlize_reasons(request.reasons));
+          if (request.dialog === "borrow") {
+              $('#guilt_reason_input').focus();
+          }
+      }
+      if (request.dialog && request.action === "close") {
+          modal.close();
+      }
+
+  });
+
+
+chrome.extension.sendMessage({e:"new_page"});
+
+

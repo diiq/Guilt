@@ -46,12 +46,13 @@
     background-color:#f2e9e1;
     border:5px solid #cbe86b;
     width:250px;
+    height:25px;
     color:#471713;
     margin: 25px 0px;
 }
 
 .guilt_button {
-    font-size:24px;
+    font:24px/30px Arial, sans;
     padding:5px;
     text-align:center;
     border-radius:10px;
@@ -61,15 +62,20 @@
     color:#788e2f;
     margin-top:25px;
     cursor:hand;
-}
+    }
 
 .guilt_button:hover {
     background-color:#cbe86b;
     color:#788e2f;
+    cursor:hand;
 }
 
 .guilt_right_button {
     float:right;
+}
+
+#guilt_5_button {
+    font-weight:bold;
 }
 
 #guilt_reasons {
@@ -97,9 +103,11 @@ align:center;
 }
 #guilt_reasons_list ul li {
     padding-left:25px;
+    font: 10px/15px Arial, sans;
+    height:15px;
 }
 
-#guilt_reasons_list ul li:nth-child(2n+1) {
+#guilt_reasons_list ul li:nth-child(even) {
     background-color:#f2e9e1;
 }
 

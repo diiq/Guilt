@@ -1,5 +1,5 @@
 var timed_out = true;
-var MAXREASONS = 0;
+var MAXREASONS = 50;
 //localStorage["reasons"] = null;
 var reasons = [];//localStorage["reasons"] ? $.parseJSON(localStorage["reasons"]) : [];
 
@@ -42,8 +42,8 @@ chrome.extension.onMessage.addListener(
           chrome.tabs.sendMessage(sender.tab.id, 
               {dialog:"borrow", action:"open", reasons:reasons});
       } else if (request.time) {
-          reasons.push(request.reason);
-          if (reasons.length > MAXREASONS) reasons.shift();
+          reasons.unshift(request.reason);
+          if (reasons.length > MAXREASONS) reasons.pop();
           save_reasons();
           timed_out = false;
 
@@ -54,6 +54,9 @@ chrome.extension.onMessage.addListener(
               timed_out = true;
               send_all_tabs({dialog:"success", action:"open", reasons:reasons});
           }, request.time*60000)
+      } else if (request.success) {
+          chrome.tabs.create({});
+          for_all_tabs(function(tab){chrome.tabs.remove(tab)});
       }
   });
 
