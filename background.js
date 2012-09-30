@@ -1,5 +1,20 @@
 var timed_out = true;
-var reason = "";
+var MAXREASONS = 5;
+//localStorage["reasons"] = null;
+var reasons = [];//localStorage["reasons"] ? $.parseJSON(localStorage["reasons"]) : [];
+
+var load_reasons = function () {
+    if (localStorage["save"] === "true") {
+        reasons = localStorage["reasons"].split(",,,")
+    }
+}
+
+load_reasons();
+
+var save_reasons = function () {
+    localStorage["save"] = "true";
+    localStorage["reasons"] = reasons.join(",,,");
+}
 
 var map_tab_list = function (func) {
     return function(list) {
@@ -14,20 +29,32 @@ var for_all_tabs = function (func) {
      chrome.tabs.query({url:"https://*/*"}, map_tab_list(func));
 }
 
-var success_dialog = function(tab) {
-    chrome.tabs.executeScript(tab, 
-        {code: "$('#guilt_success_dialog').dialog('open');"});
-};
-
-var borrow_dialog = function(tab) {
-    alert(tab);
-    chrome.tabs.executeScript(tab, 
-        {code: "$('#guilt_borrow_dialog').dialog('open');"});
+var send_all_tabs = function (msg) {
+    for_all_tabs(function (tab) {
+        chrome.tabs.sendMessage(tab, msg);
+    });
 };
 
 
-setInterval(function () {
-                     alert("time");
-                     for_all_tabs(borrow_dialog)
-}, 5000);
+chrome.extension.onMessage.addListener(
+  function(request, sender, sendResponse) {
+      if (request.e === "new_page" && timed_out) {
+          chrome.tabs.sendMessage(sender.tab.id, 
+              {dialog:"borrow", action:"open", reasons:reasons});
+      } else if (request.time) {
+          reasons.push(request.reason);
+          if (reasons.length > MAXREASONS) reasons.shift();
+          save_reasons();
+          timed_out = false;
+
+          send_all_tabs({dialog:"borrow", action:"close"});
+          send_all_tabs({dialog:"success", action:"close"});
+
+          setTimeout(function () {
+              timed_out = true;
+              send_all_tabs({dialog:"success", action:"open", reasons:reasons});
+          }, request.time*600)
+      }
+  });
+
 

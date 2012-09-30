@@ -1,2 +1,2 @@
-#guilt_success_dialog .ui-dialog-titlebar-close {display:none;}
-#guilt_borrow_dialog .ui-dialog-titlebar-close {display:none;}
+#guilt_reason {width:325px; font-size:30px}
+#guilt_reasons {float:right; width:200px; height:150px; margin-left:1em; border:1px solid #333; overflow-y:scroll}
