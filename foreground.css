@@ -1,2 +1,122 @@
+
+
 #guilt_reason {width:325px; font-size:30px}
-#guilt_reasons {float:right; width:200px; height:150px; margin-left:1em; border:1px solid #333; overflow-y:scroll}
+
+#guilt_overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; 
+    background: #000;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+#guilt_overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; 
+    background: #000;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+
+#guilt_modal {
+    position:absolute;
+}
+
+#guilt_query {
+    float:right;
+    border-radius:25px;
+    background-color:#fff;
+    border:5px solid #1c140d;
+    padding:25px;
+    width:250px;
+    text-align:justify;
+    margin-top:-40px;
+}
+
+#guilt_query input {
+    font-size: 20px;
+    border-radius:5px;
+    background-color:#f2e9e1;
+    border:5px solid #cbe86b;
+    width:250px;
+    color:#471713;
+    margin: 25px 0px;
+}
+
+.guilt_button {
+    font-size:24px;
+    padding:5px;
+    text-align:center;
+    border-radius:10px;
+    background-color:#dffa84;
+    border:5px solid #cbe86b;
+    width:90px;
+    color:#788e2f;
+    margin-top:25px;
+    cursor:hand;
+}
+
+.guilt_button:hover {
+    background-color:#cbe86b;
+    color:#788e2f;
+}
+
+#guilt_15_button {
+    float:right;
+}
+
+#guilt_reasons {
+    color:#1c1408;
+    width:262px;
+    background-color:#fff;
+    border:5px solid #1c140d;
+    margin-top:40px;
+    padding:0px
+}
+
+#guilt_reasons img {
+margin:10px;
+align:center;
+}
+
+#guilt_reasons_list {
+    overflow-y:auto;
+    height:120px;
+    border-top:1px solid #f2e9e1;
+}
+#guilt_reasons_list ul {
+    padding:0px;margin:0px;
+    list-style:none;
+}
+#guilt_reasons_list ul li {
+    padding-left:25px;
+}
+
+#guilt_reasons_list ul li:nth-child(2n+1) {
+    background-color:#f2e9e1;
+}
+
+
+#guilt_modal ::-webkit-scrollbar{width:9px;height:9px;}
+#guilt_modal ::-webkit-scrollbar-button:start:decrement,
+#guilt_modal ::-webkit-scrollbar-button:end:increment{display:block;
+                                                        height:0;
+                                                        background-color:transparent;}
+#guilt_modal ::-webkit-scrollbar-track-piece{background-color:#f2e9e1;
+                                               border-radius:0;
+                                            }
+#guilt_modal ::-webkit-scrollbar-thumb:vertical{height:20px;
+                                                  background-color:#788e2f;
+                                                  border-radius:8px;}
+
+
+#guilt_borrow {
+    padding:0px; margin:0px; width:550px;
+}

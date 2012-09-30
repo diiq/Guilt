@@ -1,1 +1,98 @@
-4
+
+<html>
+<head>
+<script src="js/jquery-1.8.2.min.js"></script>
+<script>
+var modal = (function(){
+    var 
+    method = {},
+    overlay = $('<div id="guilt_overlay"></div>'),
+    modal = $('<div id="guilt_modal"></div>');
+
+    modal.hide();
+    overlay.hide();
+
+    $(document).ready(function () {
+        $('body').append(overlay, modal);
+    });
+
+    method.center = function () {
+        var top, left;
+
+        top = Math.max($(window).height() - modal.outerHeight(), 0) / 2;
+        left = Math.max($(window).width() - modal.outerWidth(), 0) / 2;
+
+        modal.css({
+            top:top + $(window).scrollTop(), 
+            left:left + $(window).scrollLeft()
+        });
+    };
+
+    method.open = function (settings) {
+        modal.append(settings.content);
+
+        method.center();
+        setTimeout(method.center, 100);
+        $(window).bind('resize.modal', method.center);
+
+
+        modal.show();
+        overlay.show();
+    };
+
+    method.close = function () {
+        modal.hide();
+        modal.empty("");
+        overlay.hide();
+        (window).unbind('resize.modal');
+    };
+
+    return method;
+}());
+
+$(document).ready(function () {
+    modal.open({content: $("#guilt_borrow")});
+    $('#guilt_reason_input').focus();
+});
+</script>
+<link href="foreground.css" title="Medium" rel="stylesheet" />
+</head>
+<body>
+  
+  <div id="guilt_borrow">
+
+    <div id="guilt_query">
+      <img src="for_what.png">
+      <input type="text" id="guilt_reason_input"></input>
+      <img src="how_long.png">
+      <div class="guilt_button" id="guilt_15_button">15 min</div>
+      <div class="guilt_button" id="guilt_5_button">5 min</div>
+    </div>
+
+    <div id="guilt_reasons">
+      <img src="recent.png">
+      <div id="guilt_reasons_list">
+        <ul>
+        <li>Porn</li>
+        <li>Email</li>
+        <li>Facebook</li>
+        <li>Trolling</li>
+        <li>jquery modl</li>
+        <li>email</li>        
+        <li>desert island music</li>
+        <li>fantasy island reruns</li>
+        <li>Porn</li>
+        <li>Email</li>
+        <li>Facebook</li>
+        <li>Trolling</li>
+        <li>jquery modl</li>
+        <li>email</li>        
+        <li>desert island music</li>
+        <li>fantasy island reruns</li>
+      </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

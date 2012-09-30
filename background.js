@@ -1,5 +1,5 @@
 var timed_out = true;
-var MAXREASONS = 5;
+var MAXREASONS = 0;
 //localStorage["reasons"] = null;
 var reasons = [];//localStorage["reasons"] ? $.parseJSON(localStorage["reasons"]) : [];
 
@@ -53,7 +53,7 @@ chrome.extension.onMessage.addListener(
           setTimeout(function () {
               timed_out = true;
               send_all_tabs({dialog:"success", action:"open", reasons:reasons});
-          }, request.time*600)
+          }, request.time*60000)
       }
   });
 

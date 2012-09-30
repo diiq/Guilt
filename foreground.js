@@ -67,3 +67,48 @@ chrome.extension.onMessage.addListener(
 
 
 chrome.extension.sendMessage({e:"new_page"});
+
+
+
+var modal = (function(){
+    var 
+    method = {},
+    overlay = $('<div id="guilt_overlay"></div>');
+    modal = $('<div id="guilt_modal"><div id="guilt_content"></div></div>');
+    content = $('');
+
+    modal.hide();
+    overlay.hide();
+    modal.append(content);
+
+    $('body').append(overlay, modal);
+
+    method.center = function () {
+        var top, left;
+
+        top = Math.max($(window).height() - modal.outerHeight(), 0) / 2;
+        left = Math.max($(window).width() - modal.outerWidth(), 0) / 2;
+
+        modal.css({
+            top:top + $(window).scrollTop(), 
+            left:left + $(window).scrollLeft()
+        });
+    };
+
+    method.open = function (settings) {
+        method.center();
+
+        $(window).bind('resize.modal', method.center);
+
+        modal.show();
+        overlay.show();
+    };
+
+    method.close = function () {
+        modal.hide();
+        overlay.hide();
+        (window).unbind('resize.modal');
+    };
+
+    return method;
+}());
