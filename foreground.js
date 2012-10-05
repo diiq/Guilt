@@ -36,7 +36,7 @@ var modal = (function(){
 
     method.close = function () {
         modal.hide();
-        $("body").append(modal.contents())
+        $("body").append(modal.contents().hide())
         modal.remove();
         overlay.hide();
         overlay.remove();
